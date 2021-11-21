@@ -2,8 +2,7 @@
 
 from argparse import ArgumentParser
 from sys import argv
-from typing import Dict
-import enchant
+from enchant import Dict as dicnary
 
 #pip3 install pyenchant
 
@@ -13,7 +12,7 @@ class caesar:
         self.plainText = plainText
         self.encryptedText = encryptedText
         self.key = key
-        self.dictionary = enchant.Dict("en_US")
+        self.dictionary = dicnary("en_US")
     
     def encrypt(self, plainText=None , encryptionKey=None):
         # set the default plaintext if none is passed
