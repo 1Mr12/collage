@@ -2,8 +2,12 @@
 
 from argparse import ArgumentParser
 from sys import argv
-from enchant import Dict as dicnary
 
+try:
+    from enchant import Dict as dicnary
+except:
+    print("enchant library is not installed use:\nsudo apt-get install -y python3-enchant or pip3 to install it")
+    
 #pip3 install pyenchant
 
 class caesar:
