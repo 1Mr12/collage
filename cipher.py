@@ -57,15 +57,25 @@ class caesar:
                 result.append(i)
         return "".join(str(x) for x in result)
 
-    def bruteForce(self, encryptedText):
+    # return array of key and it's result [[1,"Text"],[2,"Text"]]
+    def bruteForce(self, encryptedText=None):
+        if encryptedText is None: # if no encrypted text is passed assig the class self
+            encryptedText = self.encryptedText
+        result = []
+        for i in range(27): # all possible keys
+            result.append([i,self.decrypt(i,encryptedText=encryptedText)])
+        else:
+            return result # return the result array after finishing the loop
+
+    def isEnglish(text):
         pass
 
-
-help="\n-encrypt [text] -key [key]\n-decrypt [cipher] -key [key]\n"
+# Help message - how to use the script
+help="\n-encrypt [text] -key [key]\n-decrypt [cipher] -key [key]\n-bruteForce [ Encrypted Text]"
 
 if __name__ == "__main__":
     #parser = ArgumentParser()
-    if len(argv) != 5:
+    if len(argv) < 3:
         print(help)
         #print(argv)
         exit()
@@ -79,6 +89,12 @@ if __name__ == "__main__":
         key = int(argv[4])
         cipherText = caesar(encryptedText=encryptedText , key=key)
         print(cipherText.decrypt(key))
+    elif argv[1] == "-bruteForce":
+        encryptedText = argv[2]
+        cipherText = caesar(encryptedText=encryptedText)
+        bruteForceResult= cipherText.bruteForce()
+        for key , text in bruteForceResult:
+            print("Key:",key,"is",text,sep=" ")
     else:
         print(help)
     
