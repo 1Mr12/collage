@@ -9,7 +9,7 @@ except:
     print("enchant library is not installed use:\nsudo apt-get install -y python3-enchant or pip3 to install it")
     
 
-class caesar:
+class Caesar:
     # setting the data
     def __init__(self,plainText=None, encryptedText=None, key=3 ):
         self.plainText = plainText
@@ -82,6 +82,25 @@ class caesar:
             if cipherText.isEnglish(text):
                 return [key,text]
 
+class Affine:
+    def __init__(self,plainText=None, encryptedText=None):
+        self.plainText = plainText
+        self.encryptedText = encryptedText
+        self.dictionary = dicnary("en_US")
+
+    def encrypt(self):
+        pass
+    def decrypt(self):
+        pass
+
+    def gcd(self):
+        pass
+
+    def multiplicativeInverse(self):
+        pass
+
+
+
 # Help message - how to use the script
 help="\n-encrypt [text] -key [key]\n-decrypt [cipher] -key [key]\n-bruteForce [ Encrypted Text]"
 
@@ -94,16 +113,16 @@ if __name__ == "__main__":
     elif argv[1] == "-encrypt" and argv[3] == "-key":
         plainText = argv[2]
         key = int(argv[4])
-        cipherText = caesar(plainText=plainText , key=key)
+        cipherText = Caesar(plainText=plainText , key=key)
         print(cipherText.encrypt(encryptionKey=key))
     elif argv[1] == "-decrypt" and argv[3] == "-key":
         encryptedText = argv[2]
         key = int(argv[4])
-        cipherText = caesar(encryptedText=encryptedText , key=key)
+        cipherText = Caesar(encryptedText=encryptedText , key=key)
         print(cipherText.decrypt(key))
     elif argv[1] == "-bruteForce":
         encryptedText = argv[2]
-        cipherText = caesar(encryptedText=encryptedText)
+        cipherText = Caesar(encryptedText=encryptedText)
         bruteForceResult= cipherText.bruteForce()
         resultKey = cipherText.findUsedKey(bruteForceResult)
         print("Key",resultKey[0],"Gives",resultKey[1])
