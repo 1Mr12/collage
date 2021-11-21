@@ -2,6 +2,10 @@
 
 from argparse import ArgumentParser
 from sys import argv
+from typing import Dict
+import enchant
+
+#pip3 install pyenchant
 
 class caesar:
     # setting the data
@@ -9,7 +13,7 @@ class caesar:
         self.plainText = plainText
         self.encryptedText = encryptedText
         self.key = key
-        self.dictionary = {ascii:chr(ascii) for ascii in range(128)}
+        self.dictionary = enchant.Dict("en_US")
     
     def encrypt(self, plainText=None , encryptionKey=None):
         # set the default plaintext if none is passed
@@ -67,8 +71,14 @@ class caesar:
         else:
             return result # return the result array after finishing the loop
 
-    def isEnglish(text):
-        pass
+    # if it's mixed with numbers Gives False
+    def isEnglish(self,text):
+        return self.dictionary.check(text)
+    
+    def findUsedKey(self,bruteForceResult):
+        for key , text in bruteForceResult:
+            if cipherText.isEnglish(text):
+                return [key,text]
 
 # Help message - how to use the script
 help="\n-encrypt [text] -key [key]\n-decrypt [cipher] -key [key]\n-bruteForce [ Encrypted Text]"
@@ -93,8 +103,8 @@ if __name__ == "__main__":
         encryptedText = argv[2]
         cipherText = caesar(encryptedText=encryptedText)
         bruteForceResult= cipherText.bruteForce()
-        for key , text in bruteForceResult:
-            print("Key:",key,"is",text,sep=" ")
+        resultKey = cipherText.findUsedKey(bruteForceResult)
+        print("Key",resultKey[0],"Gives",resultKey[1])
     else:
         print(help)
     
