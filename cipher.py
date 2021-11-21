@@ -8,7 +8,6 @@ try:
 except:
     print("enchant library is not installed use:\nsudo apt-get install -y python3-enchant or pip3 to install it")
     
-#pip3 install pyenchant
 
 class caesar:
     # setting the data
