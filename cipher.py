@@ -77,9 +77,11 @@ class Caesar:
     def isEnglish(self,text):
         return self.dictionary.check(text)
     
+    # go deeper - avoid numbers
     def findUsedKey(self,bruteForceResult):
         for key , text in bruteForceResult:
-            if cipherText.isEnglish(text):
+            words = text.split()
+            if cipherText.isEnglish(words[0]):
                 return [key,text]
 
 class Affine:
@@ -125,7 +127,10 @@ if __name__ == "__main__":
         cipherText = Caesar(encryptedText=encryptedText)
         bruteForceResult= cipherText.bruteForce()
         resultKey = cipherText.findUsedKey(bruteForceResult)
-        print("Key",resultKey[0],"Gives",resultKey[1])
+        if resultKey:
+            print("Key",resultKey[0],"Gives",resultKey[1])
+        else:
+            print("Not Found , or it has a numbers")
     else:
         print(help)
     
