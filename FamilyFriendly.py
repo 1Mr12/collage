@@ -11,15 +11,10 @@ except:
 
 
 class Video2Frames:
-	# Linux Command to Find the total number of frames in the video
-	command = "ffmpeg -i {path} -vcodec copy -f rawvideo -y /dev/null 2>&1 | tr ^M '\n' | awk '/^frame=/ {print $2}'|tail -n 1"
-	
+
 	def __init__(self, videoPath=None) -> None:
 		self.VideoPath = videoPath
 
-	def findFramesNumber(self):
-		numberOfFrames = subprocess.run(self.command.format(path=self.videoPath),capture_output=True,shell=True).stdout.decode("utf-8").strip()
-		return numberOfFrames
 
 	def extractFrames(self):
 		# Opens the Video file
@@ -44,6 +39,8 @@ class Video2Frames:
 
 
 class FamilyFriendly(Video2Frames):
+	# Linux Command to Find the total number of frames in the video
+	command = "ffmpeg -i {path} -vcodec copy -f rawvideo -y /dev/null 2>&1 | tr ^M '\n' | awk '/^frame=/ {print $2}'|tail -n 1"
 	
 	def __init__(self, videoPath=None) -> None:
 		self.BadFrames = []
@@ -52,6 +49,9 @@ class FamilyFriendly(Video2Frames):
 		self._fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 		self._out = cv2.VideoWriter(self._name, self._fourcc, 30.0, (1920,1080))
 
+	def findFramesNumber(self):
+		numberOfFrames = subprocess.run(self.command.format(path=self.videoPath),capture_output=True,shell=True).stdout.decode("utf-8").strip()
+		return numberOfFrames
 
 
 	def writeFrame(self,frame):
