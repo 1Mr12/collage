@@ -40,7 +40,7 @@ class Video2Frames:
 
 class FamilyFriendly(Video2Frames):
 	# Linux Command to Find the total number of frames in the video
-	command = "ffmpeg -i {path} -vcodec copy -f rawvideo -y /dev/null 2>&1 | tr ^M '\n' | awk '/^frame=/ {print $2}'|tail -n 1"
+	command = "ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 {path}}"
 	
 	def __init__(self, videoPath=None) -> None:
 		self.BadFrames = []
