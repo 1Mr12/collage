@@ -50,7 +50,7 @@ class FamilyFriendly(Video2Frames):
 		self._out = cv2.VideoWriter(self._name, self._fourcc, 30.0, (1920,1080))
 
 	def findFramesNumber(self):
-		numberOfFrames = subprocess.run(self.command.format(path=self.videoPath),capture_output=True,shell=True).stdout.decode("utf-8").strip()
+		numberOfFrames = subprocess.run(self.command.format(path=self.VideoPath),capture_output=True,shell=True).stdout.decode("utf-8").strip()
 		return numberOfFrames
 
 
