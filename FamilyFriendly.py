@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+from os import times
+
+
 try:
 	import cv2
 	import subprocess
@@ -40,7 +43,7 @@ class Video2Frames:
 
 class FamilyFriendly(Video2Frames):
 	# Linux Command to Find the total number of frames in the video
-	command = "ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 {path}}"
+	command = "ffprobe -v error -select_streams v:0 -count_packets -show_entries stream=nb_read_packets -of csv=p=0 {path}"
 	
 	def __init__(self, videoPath=None) -> None:
 		self.BadFrames = []
@@ -48,10 +51,15 @@ class FamilyFriendly(Video2Frames):
 		self._name = 'FamilyFriendly-{x}'.format(x=self.VideoPath.replace("/",''))
 		self._fourcc = cv2.VideoWriter_fourcc(*'MP4V')
 		self._out = cv2.VideoWriter(self._name, self._fourcc, 30.0, (1920,1080))
+		self.videoFramesNumber=0
+		self.timeToFinish=0
 
 	def findFramesNumber(self):
 		numberOfFrames = subprocess.run(self.command.format(path=self.VideoPath),capture_output=True,shell=True).stdout.decode("utf-8").strip()
-		return numberOfFrames
+		self.videoFramesNumber=numberOfFrames
+
+	def estematedTime(self):
+		self.timeToFinish = ( int(self.videoFramesNumber) * 6 ) / 3600
 
 
 	def writeFrame(self,frame):
@@ -59,7 +67,9 @@ class FamilyFriendly(Video2Frames):
 		
 	def vision(self,frame):
 		cv2.imwrite('Frame.jpg',frame)
+		print("d1")
 		result = nude.is_nude('Frame.jpg')
+		print("d2")
 		return result
 
 
@@ -114,8 +124,9 @@ if __name__=='__main__':
 		print("processing ",args.input)
 		if args.input:
 			video = FamilyFriendly(videoPath=args.input)
-			numberOfFrames = video.findFramesNumber()
-			x = input("start processing: ",numberOfFrames)
+			video.findFramesNumber()
+			video.estematedTime()
+			x = input("start processing:{fpv} will take {time} Hour [yes]: ".format(fpv=video.videoFramesNumber, time=video.timeToFinish))
 			if x == "yes":
 				video.deleteBadFrames()
 			else:
